@@ -3,4 +3,70 @@ RA: 010623002
 
 27/08/2024 finalização planejamento imagem tábela.
 
-02/09/2024 Atualização desenho Query "Gostaria de Adicionar entrega mas não sei como". 
+08/09/2024
+CREATE DATABASE RPGStoreDB;
+
+USE RPGStoreDB;
+
+-- Tabela de Clientes
+CREATE TABLE clientes (
+  id INT PRIMARY KEY IDENTITY,
+  nome VARCHAR(100) NOT NULL,
+  email VARCHAR(100) UNIQUE NOT NULL,
+  senha VARCHAR(255) NOT NULL,
+  endereco TEXT,
+  telefone VARCHAR(20),
+  data_cadastro DATE
+);
+
+-- Tabela de Produtos
+CREATE TABLE produtos (
+  id INT PRIMARY KEY IDENTITY,
+  nome VARCHAR(100) NOT NULL,
+  descricao TEXT,
+  preco DECIMAL(10,2) NOT NULL,
+  quantidade_estoque INT NOT NULL,
+  data_adicionado DATE
+);
+
+-- Tabela de Pedidos
+CREATE TABLE pedidos (
+  id INT PRIMARY KEY IDENTITY,
+  cliente_id INT,
+  data_pedido DATE,
+  status VARCHAR(100),
+  total DECIMAL(10,2) NOT NULL,
+  FOREIGN KEY (cliente_id) REFERENCES clientes(id)
+);
+
+-- Tabela de Itens no Pedido
+CREATE TABLE itens_pedidos (
+  id INT PRIMARY KEY IDENTITY,
+  pedido_id INT,
+  produto_id INT,
+  quantidade INT NOT NULL,
+  preco_unitario DECIMAL(10,2) NOT NULL,
+  FOREIGN KEY (pedido_id) REFERENCES pedidos(id),
+  FOREIGN KEY (produto_id) REFERENCES produtos(id)
+);
+
+-- Tabela de Financeiro (Transações)
+CREATE TABLE transacoes (
+  id INT PRIMARY KEY IDENTITY,
+  pedido_id INT,
+  metodo_pagamento VARCHAR(50) NOT NULL,
+  status_pagamento VARCHAR(50) NOT NULL,
+  data_transacao DATE,
+  valor_pago DECIMAL(10,2) NOT NULL,
+  FOREIGN KEY (pedido_id) REFERENCES pedidos(id)
+);
+
+-- Tabela de Configurações do Site
+CREATE TABLE configuracoes_site (
+  id INT PRIMARY KEY IDENTITY,
+  nome_loja VARCHAR(100),
+  email_contato VARCHAR(100),
+  telefone_contato VARCHAR(20),
+  endereco_loja TEXT,
+  descricao_loja TEXT
+);
